@@ -59,6 +59,7 @@ def readSerialData(port):
     print "Connected! Listening to serial output..."
     while True:
         input = ser.readline()
+        input.replace(r"\r\n", r"\n")
         print input
         # print "Received: ", input +  " -- looking for urls..."
         #find urls in returned data
@@ -66,7 +67,7 @@ def readSerialData(port):
         for u in urls:
             #go to url
             print "Requesting: ", u
-            print urllib2.urlopen(u).read()
+            result = urllib2.urlopen(u).read()
 
 #this is so that a CTRL C doesnt output a horrible error...
 def exit_gracefully(signum, frame):
@@ -89,13 +90,16 @@ def exit_gracefully(signum, frame):
 if __name__ == '__main__':
     global baudRate
     if len(sys.argv) < 2:
-        print "Please specify a baud rate"
-        sys.exit(1)
+        print "Baud rate being set to 9600 by default"
+        baudRate = 9600
+    else:
+        baudRate = sys.argv[1]
+        print "Baud rate is set to: " + str(baudRate)
     # store the original SIGINT handler
     original_sigint = signal.getsignal(signal.SIGINT)
     signal.signal(signal.SIGINT, exit_gracefully)
-    baudRate = sys.argv[1]
-    print "Baud rate is set to: " + baudRate
+
+
     print "Searching for an Arduino..."
     ports = serial_ports()
     for i in ports:
