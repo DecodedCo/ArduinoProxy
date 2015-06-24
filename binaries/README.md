@@ -2,12 +2,13 @@
 
 *Prototyping IoT without direct internet connectivity*
 
-## Mac OS X
+## Mac OS X - arduinoProxy.app
 
 * Tested on OS X Yosemite
 
 ### Setup
 
+2. Open `arduinoProxy.app` using a right-click, and choose "Show Package Contents".
 1. Copy the `arduinoProxy.py` script into the `Contents/Resources/Scripts` directory, overwriting the symbolic link.
 2. Double click to run!
 
