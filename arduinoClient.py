@@ -30,7 +30,7 @@ import serial
 import urllib2
 import signal
 
-#list serial ports
+# Find all serial ports
 def serial_ports():
 
     if sys.platform.startswith('win'):
@@ -54,51 +54,42 @@ def serial_ports():
             pass
     return result
 
+# Read serial data and process for URLs
 def readSerialData(port):
-    ser = serial.Serial(port, 9600)
+    ser = serial.Serial(port, baudRate)
     print "Connected! Listening to serial output..."
     while True:
-        input = ser.readline()
-        input.replace(r"\r\n", r"\n")
-        print input
-        # print "Received: ", input +  " -- looking for urls..."
+        input = ser.readline().strip()
         #find urls in returned data
-        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', input)
-        for u in urls:
-            #go to url
-            print "Requesting: ", u
-            result = urllib2.urlopen(u).read()
+        url = re.search('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', input)
+        if url is not None:
+            url = url.group(0)
+            result = urllib2.urlopen(url).read()
+            print "Requested " + url
+        else:
+            print input
 
 #this is so that a CTRL C doesnt output a horrible error...
 def exit_gracefully(signum, frame):
     # restore the original signal handler as otherwise evil things will happen
     # in raw_input when CTRL+C is pressed, and our signal handler is not re-entrant
     signal.signal(signal.SIGINT, original_sigint)
-
-    try:
-        if raw_input("\nReally quit? (y/n)> ").lower().startswith('y'):
-            "Goodbye!"
-            sys.exit(1)
-
-    except KeyboardInterrupt:
-        print("Ok ok, quitting")
-        sys.exit(1)
-
+    print "Goodbye!"
+    sys.exit(1)
     # restore the exit gracefully handler here
     signal.signal(signal.SIGINT, exit_gracefully)
 
 if __name__ == '__main__':
     global baudRate
     if len(sys.argv) < 2:
-        print "Baud rate being set to 9600 by default"
+        print "Baud rate set to 9600 by default"
         baudRate = 9600
     else:
         baudRate = sys.argv[1]
-        print "Baud rate is set to: " + str(baudRate)
+        print "Baud rate set to: " + str(baudRate)
     # store the original SIGINT handler
     original_sigint = signal.getsignal(signal.SIGINT)
     signal.signal(signal.SIGINT, exit_gracefully)
-
 
     print "Searching for an Arduino..."
     ports = serial_ports()
@@ -107,4 +98,4 @@ if __name__ == '__main__':
             print "Connecting to " + i
             readSerialData(i)
             break
-    print "No Arduino connected"
+    print "No Arduino available"
