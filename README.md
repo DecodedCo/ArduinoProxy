@@ -1,7 +1,11 @@
 ## Python Arduino
 
-* A simple application for reading from the serial port where the arduino is connected and display the data to the temrinal,
-* if the application sees a URL it will do a get request against that URL and display the response before continuing reading from the arduino
+* A simple application for reading from the serial port where the arduino is connected, and displaying the data to the terminal
+* If the application sees a URL it will do a get request against that URL and display the response before continuing reading from the arduino
+
+### Installation
+
+* `pip install pySerial`
 
 ### Usage
 
@@ -19,12 +23,11 @@ void loop() {
 
 * To quit do a CTRL-C and it will gracefully ask you if you are sure.
 
-
-
+### License
 
 The MIT License (MIT)
 
-Copyright (c) <year> <copyright holders>
+Copyright (c) 2015 Decoded
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -2,7 +2,7 @@
 '''
 The MIT License (MIT)
 
-Copyright (c) 2015 DecodedCo
+Copyright (c) 2015 Decoded
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+
 import re
 import sys
 import glob
@@ -29,12 +30,6 @@ import serial
 import urllib2
 import signal
 
-#DecodedCo
-#author: Alex Walker
-# june 2015
-
-#store the baud rate
-baudRate = 0
 #list serial ports
 def serial_ports():
 
@@ -61,6 +56,7 @@ def serial_ports():
 
 def readSerialData(port):
     ser = serial.Serial(port, 9600)
+    print "Connected! Listening to serial output..."
     while True:
         input = ser.readline()
         print input
@@ -69,7 +65,7 @@ def readSerialData(port):
         urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', input)
         for u in urls:
             #go to url
-            print "found and going to: ", u
+            print "Requesting: ", u
             print urllib2.urlopen(u).read()
 
 #this is so that a CTRL C doesnt output a horrible error...
@@ -87,21 +83,24 @@ def exit_gracefully(signum, frame):
         print("Ok ok, quitting")
         sys.exit(1)
 
-    # restore the exit gracefully handler here    
+    # restore the exit gracefully handler here
     signal.signal(signal.SIGINT, exit_gracefully)
 
 if __name__ == '__main__':
     global baudRate
     if len(sys.argv) < 2:
-        print "Please put a baud rate"
+        print "Please specify a baud rate"
         sys.exit(1)
-    # store the original SIGINT handler 
+    # store the original SIGINT handler
     original_sigint = signal.getsignal(signal.SIGINT)
     signal.signal(signal.SIGINT, exit_gracefully)
-    baudRate = sys.argv[1] 
+    baudRate = sys.argv[1]
     print "Baud rate is set to: " + baudRate
+    print "Searching for an Arduino..."
     ports = serial_ports()
     for i in ports:
         if "tty.usbmodem" in i:
+            print "Connecting to " + i
             readSerialData(i)
             break
+    print "No Arduino connected"
