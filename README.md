@@ -1,22 +1,48 @@
-## Python Arduino
+# Arduino Proxy
 
-### Prototyping IoT without direct internet connectivity
+*Prototyping IoT without direct internet connectivity*
 
-* A simple application for reading from the serial port where an Arduino is connected, and displaying the data to the terminal
-* If the application sees a URL, it will perform a GET request against that URL
+## Description
 
-### Installation
+Have you ever needed to test an Internet of Things prototype while programming your Arduino over USB, and you don't have a WiFi or Ethernet shield setup?
 
-* `pip install pySerial`
+This simple python script will listen to the serial output from your Arduino, and perform a GET request on any URLs output. It will pipe any non-URL serial output to the terminal.
 
-### Usage
+## Installation
 
-* `python arduinoClient.py [9600]`
+* You will need the `pySerial` library installed e.g. `pip install pySerial`
 
-* Optional argument for baud rate coming from Arduino (default: 9600)
+## Usage
+
+### In your Arduino code
+
+```
+void setup() {
+	Serial.begin(9600);
+}
+
+void loop() {
+	if () { // Logic to trigger an API call
+		Serial.println("http://api.to.hit/"); // URL of API
+		Serial.println("Debugging message");
+	} else {
+		Serial.println("Debugging message");
+	}
+}
+```
+
+### When you're ready to test
+
+```
+python arduinoProxy.py [9600]
+```
+
+* Optional argument for baud rate defined in your Arduino code (default: 9600)
 * To quit do a CTRL-C and it will gracefully exit
 
-### License
+The python script will parse all serial input, and perform a GET request on any URLs detected.
+
+## License
 
 The MIT License (MIT)
 
