@@ -1,7 +1,9 @@
 ## Python Arduino
 
-* A simple application for reading from the serial port where the arduino is connected, and displaying the data to the terminal
-* If the application sees a URL it will do a get request against that URL and display the response before continuing reading from the arduino
+### Prototyping IoT without direct internet connectivity
+
+* A simple application for reading from the serial port where an Arduino is connected, and displaying the data to the terminal
+* If the application sees a URL, it will perform a GET request against that URL
 
 ### Installation
 
@@ -9,19 +11,10 @@
 
 ### Usage
 
-`python arduinoClient.py 9600`
+* `python arduinoClient.py [9600]`
 
-* Where that final number is the baud rate that the arduino has been set to in the serial setup.
-* I.e if you have written
-
-```
-void loop() {
-	Serial.begin(9600);
-}
-```
-* Then the baud rate is 9600
-
-* To quit do a CTRL-C and it will gracefully ask you if you are sure.
+* Optional argument for baud rate coming from Arduino (default: 9600)
+* To quit do a CTRL-C and it will gracefully exit
 
 ### License
 
