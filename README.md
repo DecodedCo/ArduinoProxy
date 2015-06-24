@@ -42,6 +42,10 @@ python arduinoProxy.py [9600]
 
 The python script will parse all serial input, and perform a GET request on any URLs detected.
 
+## Binaries
+
+In the `binaries/` folder are ready-to-use binaries for the classroom, that can be launched from a GUI.
+
 ## License
 
 The MIT License (MIT)
