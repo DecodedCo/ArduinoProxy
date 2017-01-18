@@ -6,6 +6,7 @@
 
 * Tested on OS X Yosemite
 * Created using <http://www.sveinbjorn.org/platypus>
+* Make sure you pass the `-u` argument to Python to pass through unbuffered text
 
 ## License
 
